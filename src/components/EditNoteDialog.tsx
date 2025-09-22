@@ -32,9 +32,9 @@ export function EditNoteDialog({ note, open, onOpenChange, onUpdateNote }: EditN
   // Reset form when note changes or dialog opens
   useEffect(() => {
     if (note && open) {
-      setTitle(note.title);
-      setContent(note.content);
-      setType(note.type);
+      setTitle(note.title || "");
+      setContent(note.content || "");
+      setType(note.type || "note");
       setDueDate(note.dueDate);
       setTags(note.tags || []);
       setTagInput("");
@@ -44,7 +44,12 @@ export function EditNoteDialog({ note, open, onOpenChange, onUpdateNote }: EditN
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title.trim() || !note) return;
+    console.log("Form submitted with:", { title, content, type, dueDate, tags });
+    
+    if (!title.trim() || !note) {
+      console.log("Validation failed:", { title: title.trim(), note });
+      return;
+    }
 
     const updatedNote: Note = {
       ...note,
@@ -56,6 +61,7 @@ export function EditNoteDialog({ note, open, onOpenChange, onUpdateNote }: EditN
       updatedAt: new Date(),
     };
 
+    console.log("Calling onUpdateNote with:", updatedNote);
     onUpdateNote(updatedNote);
     onOpenChange(false);
   };

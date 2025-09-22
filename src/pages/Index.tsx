@@ -91,17 +91,20 @@ const Index = () => {
     const convertDates = (items: any[]) => {
       return items.map(item => ({
         ...item,
-        createdAt: new Date(item.createdAt),
-        updatedAt: new Date(item.updatedAt),
-        dueDate: item.dueDate ? new Date(item.dueDate) : undefined,
+        createdAt: typeof item.createdAt === 'string' ? new Date(item.createdAt) : item.createdAt,
+        updatedAt: typeof item.updatedAt === 'string' ? new Date(item.updatedAt) : item.updatedAt,
+        dueDate: item.dueDate && typeof item.dueDate === 'string' ? new Date(item.dueDate) : item.dueDate,
       }));
     };
 
-    if (folders.length > 0 && typeof folders[0].createdAt === 'string') {
+    // Only convert if we have items and they need conversion
+    if (folders.length > 0 && folders[0].createdAt && typeof folders[0].createdAt === 'string') {
+      console.log("Converting folder dates...");
       setFolders(convertDates(folders));
     }
     
-    if (notes.length > 0 && typeof notes[0].createdAt === 'string') {
+    if (notes.length > 0 && notes[0].createdAt && typeof notes[0].createdAt === 'string') {
+      console.log("Converting note dates...");
       setNotes(convertDates(notes));
     }
   }, []);
@@ -163,11 +166,13 @@ const Index = () => {
   };
 
   const handleEditNote = (note: Note) => {
+    console.log("Editando nota:", note);
     setEditingNote(note);
     setEditDialogOpen(true);
   };
 
   const handleUpdateNote = (updatedNote: Note) => {
+    console.log("Atualizando nota:", updatedNote);
     setNotes(prev => prev.map(note => 
       note.id === updatedNote.id ? updatedNote : note
     ));
