@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Folder as FolderIcon, Settings, Plus, MoreHorizontal, Edit3, Trash2 } from "lucide-react";
+import { Logo } from "./Logo";
 import {
   Sidebar,
   SidebarContent,
@@ -51,16 +52,10 @@ export function AppSidebar({
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50">
       <SidebarHeader className={cn("p-4", isCollapsed && "p-2")}>
-        {!isCollapsed && (
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <FolderIcon className="h-4 w-4 text-white" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold">Anotações</h2>
-              <p className="text-xs text-muted-foreground">Organize seus projetos</p>
-            </div>
-          </div>
+        {!isCollapsed ? (
+          <Logo size="sm" />
+        ) : (
+          <Logo size="sm" showText={false} className="justify-center" />
         )}
       </SidebarHeader>
 

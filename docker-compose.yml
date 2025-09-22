@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  ideiaflow:
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ideiaflow.rule=Host(`seu-dominio.com`)"
+      - "traefik.http.routers.ideiaflow.tls=true"
+      - "traefik.http.routers.ideiaflow.tls.certresolver=letsencrypt"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
