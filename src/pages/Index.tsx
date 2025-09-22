@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { CreateNoteDialog } from "@/components/CreateNoteDialog";
+import { EditNoteDialog } from "@/components/EditNoteDialog";
 import { NoteCard } from "@/components/NoteCard";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryFilter } from "@/components/CategoryFilter";
@@ -8,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, Lightbulb, TrendingUp, FolderOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { Note, NoteType, Folder } from "@/types";
 
 // Mock data para demonstração
@@ -75,12 +77,34 @@ const mockNotes: Note[] = [
 ];
 
 const Index = () => {
-  const [folders, setFolders] = useState<Folder[]>(mockFolders);
-  const [notes, setNotes] = useState<Note[]>(mockNotes);
+  const [folders, setFolders] = useLocalStorage<Folder[]>("ideiaflow-folders", mockFolders);
+  const [notes, setNotes] = useLocalStorage<Note[]>("ideiaflow-notes", mockNotes);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<NoteType | "all">("all");
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const { toast } = useToast();
+
+  // Convert date strings back to Date objects when loading from localStorage
+  useEffect(() => {
+    const convertDates = (items: any[]) => {
+      return items.map(item => ({
+        ...item,
+        createdAt: new Date(item.createdAt),
+        updatedAt: new Date(item.updatedAt),
+        dueDate: item.dueDate ? new Date(item.dueDate) : undefined,
+      }));
+    };
+
+    if (folders.length > 0 && typeof folders[0].createdAt === 'string') {
+      setFolders(convertDates(folders));
+    }
+    
+    if (notes.length > 0 && typeof notes[0].createdAt === 'string') {
+      setNotes(convertDates(notes));
+    }
+  }, []);
 
   const handleCreateFolder = (folderData: Omit<Folder, "id" | "createdAt" | "updatedAt">) => {
     const newFolder: Folder = {
@@ -139,9 +163,17 @@ const Index = () => {
   };
 
   const handleEditNote = (note: Note) => {
+    setEditingNote(note);
+    setEditDialogOpen(true);
+  };
+
+  const handleUpdateNote = (updatedNote: Note) => {
+    setNotes(prev => prev.map(note => 
+      note.id === updatedNote.id ? updatedNote : note
+    ));
     toast({
-      title: "Em desenvolvimento",
-      description: "Funcionalidade de edição será implementada em breve.",
+      title: "Anotação atualizada!",
+      description: "Suas alterações foram salvas com sucesso.",
     });
   };
 
@@ -361,6 +393,14 @@ const Index = () => {
           </>
         )}
       </div>
+
+      {/* Edit Note Dialog */}
+      <EditNoteDialog
+        note={editingNote}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onUpdateNote={handleUpdateNote}
+      />
     </Layout>
   );
 };
