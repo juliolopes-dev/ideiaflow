@@ -12,13 +12,14 @@ import { Plus, CalendarIcon, X } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import { Note, NoteType } from "./NoteCard";
+import { Note, NoteType } from "@/types";
 
 interface CreateNoteDialogProps {
   onCreateNote: (note: Omit<Note, "id" | "createdAt" | "updatedAt">) => void;
+  folderId: string;
 }
 
-export function CreateNoteDialog({ onCreateNote }: CreateNoteDialogProps) {
+export function CreateNoteDialog({ onCreateNote, folderId }: CreateNoteDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -36,6 +37,7 @@ export function CreateNoteDialog({ onCreateNote }: CreateNoteDialogProps) {
       title: title.trim(),
       content: content.trim(),
       type,
+      folderId,
       dueDate,
       tags: tags.length > 0 ? tags : undefined,
     });

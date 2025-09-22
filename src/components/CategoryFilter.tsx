@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, Lightbulb, Grid3X3 } from "lucide-react";
-import { NoteType } from "./NoteCard";
+import { NoteType } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface CategoryFilterProps {

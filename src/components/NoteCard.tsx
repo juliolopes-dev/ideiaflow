@@ -3,19 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit3, Trash2, Clock, Lightbulb, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-export type NoteType = "note" | "reminder" | "project";
-
-export interface Note {
-  id: string;
-  title: string;
-  content: string;
-  type: NoteType;
-  createdAt: Date;
-  updatedAt: Date;
-  tags?: string[];
-  dueDate?: Date;
-}
+import { Note, NoteType } from "@/types";
 
 interface NoteCardProps {
   note: Note;
