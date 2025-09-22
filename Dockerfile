@@ -1,5 +1,5 @@
 # Use Node.js 18 como base
-FROM node:18-alpine as build
+FROM node:18-alpine AS build
 
 # Definir diretório de trabalho
 WORKDIR /app
@@ -7,8 +7,8 @@ WORKDIR /app
 # Copiar arquivos de dependências
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm ci --only=production
+# Instalar todas as dependências (incluindo devDependencies para o build)
+RUN npm ci
 
 # Copiar código fonte
 COPY . .
