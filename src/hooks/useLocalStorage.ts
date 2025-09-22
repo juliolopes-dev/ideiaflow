@@ -7,9 +7,7 @@ function useLocalStorage<T>(key: string, initialValue: T) {
       const item = window.localStorage.getItem(key);
       if (!item) return initialValue;
       
-      const parsed = JSON.parse(item);
-      console.log(`Loaded from localStorage [${key}]:`, parsed);
-      return parsed;
+      return JSON.parse(item);
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
       return initialValue;
@@ -21,8 +19,6 @@ function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       // Allow value to be a function so we have the same API as useState
       const valueToStore = value instanceof Function ? value(storedValue) : value;
-      
-      console.log(`Saving to localStorage [${key}]:`, valueToStore);
       
       // Save state
       setStoredValue(valueToStore);

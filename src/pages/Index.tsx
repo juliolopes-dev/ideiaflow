@@ -99,12 +99,10 @@ const Index = () => {
 
     // Only convert if we have items and they need conversion
     if (folders.length > 0 && folders[0].createdAt && typeof folders[0].createdAt === 'string') {
-      console.log("Converting folder dates...");
       setFolders(convertDates(folders));
     }
     
     if (notes.length > 0 && notes[0].createdAt && typeof notes[0].createdAt === 'string') {
-      console.log("Converting note dates...");
       setNotes(convertDates(notes));
     }
   }, []);
@@ -166,13 +164,11 @@ const Index = () => {
   };
 
   const handleEditNote = (note: Note) => {
-    console.log("Editando nota:", note);
     setEditingNote(note);
     setEditDialogOpen(true);
   };
 
   const handleUpdateNote = (updatedNote: Note) => {
-    console.log("Atualizando nota:", updatedNote);
     setNotes(prev => prev.map(note => 
       note.id === updatedNote.id ? updatedNote : note
     ));

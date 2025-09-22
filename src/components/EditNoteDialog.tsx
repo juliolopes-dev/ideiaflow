@@ -44,12 +44,7 @@ export function EditNoteDialog({ note, open, onOpenChange, onUpdateNote }: EditN
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log("Form submitted with:", { title, content, type, dueDate, tags });
-    
-    if (!title.trim() || !note) {
-      console.log("Validation failed:", { title: title.trim(), note });
-      return;
-    }
+    if (!title.trim() || !note) return;
 
     const updatedNote: Note = {
       ...note,
@@ -61,7 +56,6 @@ export function EditNoteDialog({ note, open, onOpenChange, onUpdateNote }: EditN
       updatedAt: new Date(),
     };
 
-    console.log("Calling onUpdateNote with:", updatedNote);
     onUpdateNote(updatedNote);
     onOpenChange(false);
   };
